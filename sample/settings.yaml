@@ -1,0 +1,8 @@
+title: サンプルブック
+author: テスト著者
+language: ja-JP
+cover_image: images/image.png
+output_epub: sample.epub
+output_pdf: sample.pdf
+toc_depth: 2
+page_direction: ltr

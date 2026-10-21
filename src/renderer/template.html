@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <link rel="stylesheet" href="app.css">
+  <style id="template-preview-style"></style>
+  <title>テンプレート選択 - EPUB/PDF Maker</title>
+</head>
+<body>
+<div id="template-page">
+  <div id="template-header">
+    <button id="btn-back">← 戻る</button>
+    <h2>テンプレート選択</h2>
+    <button id="btn-apply-template" class="primary" disabled>このテンプレートを適用</button>
+  </div>
+
+  <div id="template-main">
+    <!-- 左: テンプレートリスト -->
+    <div id="template-list-panel">
+      <div id="template-list"></div>
+    </div>
+
+    <!-- 右: プレビュー -->
+    <div id="template-preview-panel">
+      <div id="template-preview-placeholder">← テンプレートを選択するとプレビューが表示されます</div>
+      <div id="template-preview-content" style="display:none;">
+        <h1>はじめに</h1>
+        <h2>Sigilについて</h2>
+        <p>これはSigilで作成するEPUB基準の電子書籍を作るためのマニュアルです。Sigilのバージョンは0.7.2です。(1)</p>
+        <h2>EPUBについて</h2>
+        <p>EPUB とは電子書籍の一般的なファイル形式で、の電子書籍を編集、出版できます。EPUBはルすれば、スマートフォンでも読めちゃいます。</p>
+        <p>それでは、EPUBの作り方を楽しく学んでいきましょう。テキストが続きます。段落の字下げや行間の設定が確認できます。</p>
+        <h3>EPUBの基本構造</h3>
+        <p>EPUBファイルは実際にはZIPアーカイブです。中にはXHTMLファイル、CSSスタイルシート、そして画像ファイルが含まれています。Pandocを使うことでMarkdownから自動生成できます。</p>
+        <h2>Markdownの書き方</h2>
+        <p>Markdownは軽量マークアップ言語です。プレーンテキストで書かれ、HTMLに変換することができます。見出し、リスト、強調などの基本的な書式をサポートしています。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- テンプレート保存 -->
+  <div id="template-save-section">
+    <h3 id="template-save-title">現在の「style.css」をテンプレートとして保存</h3>
+    <div class="input-row">
+      <input type="text" id="new-template-name" placeholder="テンプレート名を入力" style="max-width: 260px;">
+      <button id="btn-save-template">保存</button>
+    </div>
+    <div id="save-template-msg" style="font-size: 12px; margin-top: 6px; color: var(--color-success);"></div>
+  </div>
+</div>
+
+<script src="template.js"></script>
+</body>
+</html>

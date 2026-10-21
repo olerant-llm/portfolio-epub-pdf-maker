@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' file: data:">
+  <link rel="stylesheet" href="app.css">
+  <title>EPUB/PDF Maker</title>
+</head>
+<body>
+  <div id="app">
+
+    <!-- プロジェクトフォルダ選択 -->
+    <section id="section-project">
+      <label for="project-path"><strong>プロジェクトフォルダ</strong></label>
+      <div class="input-row" style="margin-top: 6px;">
+        <input type="text" id="project-path" readonly placeholder="フォルダを選択してください">
+        <button id="btn-select-folder">フォルダを選択</button>
+      </div>
+    </section>
+
+    <!-- 検出ファイル -->
+    <section id="section-files" style="display: none;">
+      <h3>検出ファイル</h3>
+      <div id="file-list"></div>
+    </section>
+
+    <!-- メタデータ設定 -->
+    <section id="section-metadata" style="display: none;">
+      <h3>メタデータ設定</h3>
+
+      <div class="style-row">
+        <label>タイトル</label>
+        <input type="text" id="meta-title" placeholder="書籍タイトル" style="flex:1; max-width:320px;">
+      </div>
+
+      <div class="style-row">
+        <label>著者</label>
+        <input type="text" id="meta-author" placeholder="著者名" style="flex:1; max-width:320px;">
+      </div>
+
+      <div class="style-row">
+        <label>言語</label>
+        <select id="meta-language" style="max-width:200px;">
+          <option value="ja-JP">日本語 (ja-JP)</option>
+          <option value="en-US">English (en-US)</option>
+          <option value="zh-CN">中文 (zh-CN)</option>
+          <option value="ko-KR">한국어 (ko-KR)</option>
+          <option value="fr-FR">Français (fr-FR)</option>
+          <option value="de-DE">Deutsch (de-DE)</option>
+        </select>
+      </div>
+
+      <div class="style-row">
+        <label>表紙画像</label>
+        <div style="display:flex; align-items:center; gap:8px; flex:1;">
+          <input type="text" id="cover-image-path" readonly placeholder="未選択（表紙なしで生成）" style="flex:1; max-width:280px;">
+          <button id="btn-select-cover">参照</button>
+          <button id="btn-clear-cover" style="display:none;">クリア</button>
+        </div>
+      </div>
+      <div id="cover-preview-container" style="display:none; margin: 4px 0 8px 120px;">
+        <img id="cover-preview-img" style="max-width:120px; max-height:180px; border:1px solid var(--color-border); border-radius:4px;">
+        <div id="cover-warning" style="font-size:11px; color:var(--color-warning); margin-top:4px;"></div>
+        <div style="font-size:11px; color:var(--color-text-muted); margin-top:2px;">推奨: JPEG/PNG、1600×2400px以下、2MB以内</div>
+      </div>
+
+      <div class="style-row">
+        <label>タイトルページ</label>
+        <div class="radio-group">
+          <label><input type="radio" name="cover-position" value="top" checked> 上揃え</label>
+          <label><input type="radio" name="cover-position" value="center"> 中央揃え</label>
+        </div>
+        <span style="font-size:11px; color:var(--color-text-muted); margin-left:8px;">（フル版PDFのタイトルページの縦位置）</span>
+      </div>
+
+      <div class="style-row">
+        <label>末尾添付画像</label>
+        <div style="flex:1;">
+          <button id="btn-add-append-image">画像を追加</button>
+          <span style="font-size:11px; color:var(--color-text-muted); margin-left:8px;">（EPUB/PDFの末尾に独立ページとして順番に追加されます）</span>
+          <ul id="append-image-list" class="append-image-list"></ul>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button id="btn-save-yaml-meta">YAMLに保存</button>
+        <span id="meta-save-msg" style="font-size:12px; color: var(--color-success); margin-left:8px;"></span>
+      </div>
+    </section>
+
+    <!-- スタイル設定 -->
+    <section id="section-style" style="display: none;">
+      <h3>スタイル設定</h3>
+      <div class="style-2col">
+        <div class="style-controls">
+
+          <div class="style-row">
+            <label>テンプレート</label>
+            <select id="template-select"></select>
+            <button id="btn-template-preview">テンプレート</button>
+          </div>
+
+          <div class="style-row">
+            <label>フォント</label>
+            <select id="font-select">
+              <option value='"Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif'>Noto Sans JP</option>
+              <option value='"Noto Serif JP", "Yu Mincho", serif'>Noto Serif JP</option>
+              <option value='"Yu Gothic", "Meiryo", sans-serif'>Yu Gothic</option>
+              <option value='"Yu Mincho", serif'>Yu Mincho</option>
+              <option value="sans-serif">sans-serif（システム）</option>
+            </select>
+          </div>
+
+          <div class="style-row">
+            <label>本文サイズ</label>
+            <input type="range" id="font-size-range" min="8" max="30" step="1">
+            <input type="number" id="font-size-num" min="8" max="30" step="1" style="width:60px">
+            <span class="unit">px</span>
+            <span class="warning-inline" id="warn-font-size"></span>
+          </div>
+
+          <div class="style-row">
+            <label>行間</label>
+            <input type="range" id="line-height-range" min="1.0" max="4.0" step="0.1">
+            <input type="number" id="line-height-num" min="1.0" max="4.0" step="0.1" style="width:60px">
+            <span class="unit"></span>
+            <span class="warning-inline" id="warn-line-height"></span>
+          </div>
+
+          <div class="style-row">
+            <label>字下げ</label>
+            <input type="range" id="text-indent-range" min="0" max="5" step="0.5">
+            <input type="number" id="text-indent-num" min="0" max="5" step="0.5" style="width:60px">
+            <span class="unit">em</span>
+            <span class="warning-inline" id="warn-text-indent"></span>
+          </div>
+
+          <div class="style-row">
+            <label>テキスト揃え</label>
+            <div class="radio-group">
+              <label><input type="radio" name="text-align" value="justify"> 両端揃え</label>
+              <label><input type="radio" name="text-align" value="left"> 左揃え</label>
+              <label><input type="radio" name="text-align" value="center"> 中央揃え</label>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button id="btn-advanced-settings">詳細設定 →</button>
+            <button id="btn-reset-style">リセット</button>
+            <button id="btn-save-css">CSS保存</button>
+          </div>
+
+        </div><!-- /.style-controls -->
+
+        <!-- プレビューパネル -->
+        <div class="style-preview-panel">
+          <div class="style-preview-header">
+            <span>プレビュー</span>
+            <button id="btn-update-preview">プレビューの更新</button>
+          </div>
+          <div id="style-preview-content">
+            <h1>はじめに</h1>
+            <h2>Sigilについて</h2>
+            <p>これはSigilで作成するEPUBのサンプルプレビューです。フォント・行間・字下げなどの設定が反映されます。</p>
+            <h2>EPUBについて</h2>
+            <p>EPUB とは電子書籍の一般的なファイル形式です。スマートフォンでも読めます。</p>
+            <p>それでは、EPUBの作り方を楽しく学んでいきましょう。</p>
+          </div>
+        </div><!-- /.style-preview-panel -->
+
+      </div><!-- /.style-2col -->
+    </section>
+
+    <!-- 出力設定 -->
+    <section id="section-output" style="display: none;">
+      <h3>出力設定</h3>
+      <div class="input-row">
+        <input type="text" id="output-path" readonly placeholder="出力先フォルダ">
+        <button id="btn-select-output">選択</button>
+      </div>
+      <div id="output-write-error" style="color: var(--color-error); font-size: 12px; margin-top: 4px; display: none;">
+        ✗ 出力先に書き込みできません。別のフォルダを選択してください。
+      </div>
+      <div class="checkbox-row" style="margin-top: 10px;">
+        <label><input type="checkbox" id="gen-epub" checked> EPUB生成</label>
+        <label><input type="checkbox" id="gen-pdf" checked> PDF生成（表紙画像がある場合は4ファイル、ない場合は3ファイル）</label>
+      </div>
+      <div style="font-size:11px; color:var(--color-text-muted); margin-top:4px; margin-left:24px;">
+        表紙画像あり: 表紙イラスト付き / フル版 / 表紙なし / 本文のみ<br>
+        表紙画像なし: フル版 / 表紙なし / 本文のみ
+      </div>
+    </section>
+
+    <!-- 生成ボタン -->
+    <section id="section-generate" style="display: none;">
+      <div id="progress-container" style="width: 100%; display: none;">
+        <div id="progress-bar">
+          <div id="progress-fill"></div>
+        </div>
+        <span id="progress-label"></span>
+      </div>
+      <div class="generate-buttons">
+        <button id="btn-generate" class="primary" disabled>生成する</button>
+        <button id="btn-cancel" style="display: none;">キャンセル</button>
+      </div>
+    </section>
+
+    <!-- ログ -->
+    <section id="section-log" style="display: none;">
+      <h3>ログ</h3>
+      <div id="log-area"></div>
+      <div id="log-actions" style="margin-top: 8px; display: none; gap: 8px; flex-wrap: wrap;">
+        <button id="btn-open-temp-html" style="display: none;">temp.htmlを開く</button>
+        <button id="btn-retry-build" style="display: none;">再試行</button>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- モーダル: 上書き確認 -->
+  <div id="modal-overwrite" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h4>ファイルが既に存在します</h4>
+      <p id="modal-overwrite-msg"></p>
+      <div class="modal-buttons">
+        <button id="modal-overwrite-cancel">キャンセル</button>
+        <button id="modal-overwrite-rename">別名で保存</button>
+        <button id="modal-overwrite-ok" class="primary">上書きする</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル: PDF崩れ警告 -->
+  <div id="modal-warnings" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h4>PDF崩れの可能性があります</h4>
+      <p>以下の設定値が推奨範囲を超えています。続けて生成しますか？</p>
+      <ul class="warning-list" id="modal-warning-list"></ul>
+      <div class="modal-buttons">
+        <button id="modal-warn-cancel">キャンセル</button>
+        <button id="modal-warn-ok" class="primary">それでも生成する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル: YAML編集 -->
+  <div id="modal-yaml" class="modal-overlay" style="display: none;">
+    <div class="modal modal-yaml-inner">
+      <h4 id="modal-yaml-title">設定ファイルの編集</h4>
+      <p id="modal-yaml-desc">YAMLファイルが見つかりませんでした。以下の内容を編集して保存してください。</p>
+      <textarea id="modal-yaml-editor"></textarea>
+      <div id="modal-yaml-error" style="color: var(--color-error); font-size: 12px; margin-top: 4px; min-height: 16px;"></div>
+      <div class="modal-buttons">
+        <button id="modal-yaml-cancel">キャンセル</button>
+        <button id="modal-yaml-save" class="primary">保存する</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

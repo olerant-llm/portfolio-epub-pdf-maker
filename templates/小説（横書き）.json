@@ -1,0 +1,35 @@
+{
+  "template_name": "小説（横書き）",
+  "builtin": true,
+  "body": {
+    "font-family": "\"Noto Serif JP\", \"Yu Mincho\", serif",
+    "font-size": "16px",
+    "line-height": 2.0,
+    "text-align": "justify"
+  },
+  "p": {
+    "text-indent": "1em",
+    "margin-bottom": "0em"
+  },
+  "h1": {
+    "font-size": "1.3em",
+    "font-weight": "bold",
+    "margin-top": "3em",
+    "margin-bottom": "3em",
+    "page-break-before": true
+  },
+  "h2": {
+    "font-size": "1.15em",
+    "font-weight": "bold",
+    "margin-top": "2em",
+    "margin-bottom": "1em",
+    "border-bottom": false
+  },
+  "h3": {
+    "font-size": "1.0em",
+    "font-weight": "bold",
+    "margin-top": "1.5em",
+    "margin-bottom": "0.5em"
+  },
+  "custom_css": ""
+}

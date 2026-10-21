@@ -1,0 +1,51 @@
+{
+  "name": "epub-pdf-maker",
+  "version": "0.1.0",
+  "description": "MarkdownからEPUB3とPDFを生成するElectronアプリ",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "pack": "electron-builder --dir"
+  },
+  "dependencies": {
+    "chardet": "^2.0.0",
+    "iconv-lite": "^0.6.3",
+    "js-yaml": "^4.1.0",
+    "postcss": "^8.4.38",
+    "puppeteer-core": "^24.40.0"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.0"
+  },
+  "build": {
+    "appId": "com.epub-pdf-maker",
+    "productName": "EPUB/PDF Maker",
+    "copyright": "Copyright © 2026",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.png",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "asar": false,
+    "files": [
+      "src/**/*",
+      "templates/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "vendor/pandoc.exe",
+        "to": "pandoc/pandoc.exe"
+      },
+      {
+        "from": "vendor/chrome",
+        "to": "chrome"
+      }
+    ]
+  }
+}

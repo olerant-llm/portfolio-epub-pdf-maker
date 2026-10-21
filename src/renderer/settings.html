@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <link rel="stylesheet" href="app.css">
+  <title>詳細設定 - EPUB/PDF Maker</title>
+</head>
+<body id="settings-page">
+<div id="app-settings">
+  <h2>詳細設定</h2>
+
+  <!-- タブナビ -->
+  <nav id="tab-nav">
+    <button class="tab-btn active" data-tab="body">本文</button>
+    <button class="tab-btn" data-tab="h1">h1</button>
+    <button class="tab-btn" data-tab="h2">h2</button>
+    <button class="tab-btn" data-tab="h3">h3</button>
+    <button class="tab-btn" data-tab="list">箇条書き</button>
+    <button class="tab-btn" data-tab="blockquote">引用</button>
+    <button class="tab-btn" data-tab="code">コード</button>
+    <button class="tab-btn" data-tab="custom">カスタムCSS</button>
+  </nav>
+
+  <!-- 本文タブ -->
+  <div class="tab-panel active" id="tab-body">
+    <div class="settings-section">
+      <div class="form-row">
+        <label>フォントファミリー</label>
+        <select id="s-body-font-family">
+          <option value='"Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif'>Noto Sans JP</option>
+          <option value='"Noto Serif JP", "Yu Mincho", serif'>Noto Serif JP</option>
+          <option value='"Yu Gothic", "Meiryo", sans-serif'>Yu Gothic</option>
+          <option value='"Yu Mincho", serif'>Yu Mincho</option>
+          <option value="sans-serif">sans-serif</option>
+          <option value="serif">serif</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>フォントサイズ</label>
+        <input type="number" id="s-body-font-size" min="8" max="30" step="1">
+        <span style="color: var(--color-text-muted); font-size: 12px;">px</span>
+        <span class="warning-inline" id="s-warn-body-font-size"></span>
+      </div>
+      <div class="form-row">
+        <label>行間</label>
+        <input type="number" id="s-body-line-height" min="1.0" max="4.0" step="0.1">
+        <span class="warning-inline" id="s-warn-body-line-height"></span>
+      </div>
+      <div class="form-row">
+        <label>テキスト揃え</label>
+        <label class="toggle"><input type="radio" name="s-text-align" value="justify"> 両端揃え</label>
+        <label class="toggle" style="margin-left: 12px;"><input type="radio" name="s-text-align" value="left"> 左揃え</label>
+      </div>
+      <div class="form-row">
+        <label>字下げ</label>
+        <input type="number" id="s-p-text-indent" min="0" max="5" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-p-text-indent"></span>
+      </div>
+      <div class="form-row">
+        <label>段落下余白</label>
+        <input type="number" id="s-p-margin-bottom" min="0" max="5" step="0.1">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- h1タブ -->
+  <div class="tab-panel" id="tab-h1">
+    <div class="settings-section">
+      <div class="form-row">
+        <label>装飾パターン</label>
+        <select id="s-h1-preset">
+          <option value="plain">装飾なし</option>
+          <option value="underline">太い下線</option>
+          <option value="leftbar">左ボーダー（太め）</option>
+          <option value="box">枠で囲む</option>
+        </select>
+      </div>
+      <div id="preview-h1" style="margin: 8px 0 16px 0; padding: 12px; background: #fafafa; border-radius: 4px;">
+        <div id="preview-h1-inner" style="font-size: 1.2em; font-weight: bold; padding: 6px 0;">見出し1（h1）のサンプルテキスト</div>
+      </div>
+      <div class="form-row">
+        <label>フォントサイズ</label>
+        <input type="number" id="s-h1-font-size" min="0.5" max="5" step="0.05">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-h1-font-size"></span>
+      </div>
+      <div class="form-row">
+        <label>太字</label>
+        <label class="toggle"><input type="checkbox" id="s-h1-bold"> 太字にする</label>
+      </div>
+      <div class="form-row">
+        <label>上余白</label>
+        <input type="number" id="s-h1-margin-top" min="0" max="10" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-h1-margin-top"></span>
+      </div>
+      <div class="form-row">
+        <label>下余白</label>
+        <input type="number" id="s-h1-margin-bottom" min="0" max="10" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+      </div>
+      <div class="form-row">
+        <label>改ページ前</label>
+        <label class="toggle"><input type="checkbox" id="s-h1-page-break"> h1の前で改ページ</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- h2タブ -->
+  <div class="tab-panel" id="tab-h2">
+    <div class="settings-section">
+      <div class="form-row">
+        <label>装飾パターン</label>
+        <select id="s-h2-preset">
+          <option value="underline">シンプル下線</option>
+          <option value="leftbar">左ボーダー強調</option>
+          <option value="badge">背景色バッジ</option>
+          <option value="double">二重線</option>
+          <option value="none">装飾なし</option>
+        </select>
+      </div>
+      <div id="preview-h2" style="margin: 8px 0 16px 0; padding: 12px; background: #fafafa; border-radius: 4px;">
+        <div id="preview-h2-inner" style="font-size: 1.15em; font-weight: bold; padding: 4px 0;">見出し2（h2）のサンプルテキスト</div>
+      </div>
+      <div class="form-row">
+        <label>フォントサイズ</label>
+        <input type="number" id="s-h2-font-size" min="0.5" max="5" step="0.05">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-h2-font-size"></span>
+      </div>
+      <div class="form-row">
+        <label>太字</label>
+        <label class="toggle"><input type="checkbox" id="s-h2-bold"> 太字にする</label>
+      </div>
+      <div class="form-row">
+        <label>上余白</label>
+        <input type="number" id="s-h2-margin-top" min="0" max="10" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-h2-margin-top"></span>
+      </div>
+      <div class="form-row">
+        <label>下余白</label>
+        <input type="number" id="s-h2-margin-bottom" min="0" max="10" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+      </div>
+      <div class="form-row">
+        <label>改ページ前</label>
+        <label class="toggle"><input type="checkbox" id="s-h2-page-break"> h2の前で改ページ</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- h3タブ -->
+  <div class="tab-panel" id="tab-h3">
+    <div class="settings-section">
+      <div class="form-row">
+        <label>装飾パターン</label>
+        <select id="s-h3-preset">
+          <option value="plain">装飾なし</option>
+          <option value="dot">●マーカー</option>
+          <option value="underline">細い下線</option>
+          <option value="leftbar">細い左ボーダー</option>
+        </select>
+      </div>
+      <div id="preview-h3" style="margin: 8px 0 16px 0; padding: 12px; background: #fafafa; border-radius: 4px;">
+        <div id="preview-h3-inner" style="font-size: 1.0em; font-weight: bold; padding: 4px 0;">見出し3（h3）のサンプルテキスト</div>
+      </div>
+      <div class="form-row">
+        <label>フォントサイズ</label>
+        <input type="number" id="s-h3-font-size" min="0.5" max="5" step="0.05">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-h3-font-size"></span>
+      </div>
+      <div class="form-row">
+        <label>太字</label>
+        <label class="toggle"><input type="checkbox" id="s-h3-bold"> 太字にする</label>
+      </div>
+      <div class="form-row">
+        <label>上余白</label>
+        <input type="number" id="s-h3-margin-top" min="0" max="10" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+        <span class="warning-inline" id="s-warn-h3-margin-top"></span>
+      </div>
+      <div class="form-row">
+        <label>下余白</label>
+        <input type="number" id="s-h3-margin-bottom" min="0" max="10" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 箇条書きタブ -->
+  <div class="tab-panel" id="tab-list">
+    <div class="settings-section">
+      <p style="color: var(--color-text-muted); font-size: 12px; margin-bottom: 12px;">
+        箇条書き（ul/ol/li）のスタイルは「カスタムCSS」タブで記述してください。
+      </p>
+      <div class="form-row">
+        <label>左余白</label>
+        <input type="number" id="s-ul-padding-left" min="0" max="5" step="0.5">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+      </div>
+      <div class="form-row">
+        <label>行間</label>
+        <input type="number" id="s-li-line-height" min="1.0" max="3.0" step="0.1">
+      </div>
+    </div>
+  </div>
+
+  <!-- 引用タブ -->
+  <div class="tab-panel" id="tab-blockquote">
+    <div class="settings-section">
+      <div class="form-row">
+        <label>デザインパターン</label>
+        <select id="s-blockquote-preset">
+          <option value="leftbar">左ボーダー（青）</option>
+          <option value="card">カード風</option>
+          <option value="note">ノート風（黄）</option>
+          <option value="minimal">ミニマル</option>
+          <option value="plain">テキストのみ（斜体）</option>
+        </select>
+      </div>
+      <div id="preview-blockquote" style="margin: 8px 0 16px 0; padding: 12px; background: #fafafa; border-radius: 4px;">
+        <div id="preview-blockquote-inner" style="margin: 0; padding: 1em 1.5em; border-left: 6px solid #4a90e2; background: #f5f9ff; border-radius: 4px;">
+          引用文のサンプルテキストです。ここに本文から引用した文章が入ります。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- コードタブ -->
+  <div class="tab-panel" id="tab-code">
+    <div class="settings-section">
+      <div class="form-row">
+        <label>フォントサイズ</label>
+        <input type="number" id="s-code-font-size" min="0.7" max="1.2" step="0.05">
+        <span style="color: var(--color-text-muted); font-size: 12px;">em</span>
+      </div>
+      <div class="form-row">
+        <label>背景色</label>
+        <input type="color" id="s-code-bg" value="#f5f5f5">
+      </div>
+      <div class="form-row">
+        <label>角丸</label>
+        <input type="number" id="s-code-radius" min="0" max="12" step="1">
+        <span style="color: var(--color-text-muted); font-size: 12px;">px</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- カスタムCSSタブ -->
+  <div class="tab-panel" id="tab-custom">
+    <div class="settings-section">
+      <p style="color: var(--color-text-muted); font-size: 12px; margin-bottom: 8px;">
+        UIで管理されないCSSを自由に記述できます。最終的なstyle.cssに追記されます。
+      </p>
+      <textarea id="custom-css-editor" placeholder="/* ここにカスタムCSSを記述 */&#10;&#10;例:&#10;img { max-width: 100%; }&#10;table { border-collapse: collapse; }"></textarea>
+      <div id="custom-css-error"></div>
+    </div>
+  </div>
+
+  <!-- 下部ボタン -->
+  <div class="button-row" style="margin-top: var(--spacing-lg);">
+    <button id="btn-settings-reset">デフォルトにリセット</button>
+    <button id="btn-settings-back">メイン画面に戻る</button>
+    <button id="btn-settings-apply" class="primary">適用して戻る</button>
+  </div>
+</div>
+
+<script src="settings.js"></script>
+</body>
+</html>

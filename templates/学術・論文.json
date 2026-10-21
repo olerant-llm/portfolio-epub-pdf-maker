@@ -1,0 +1,35 @@
+{
+  "template_name": "学術・論文",
+  "builtin": true,
+  "body": {
+    "font-family": "\"Noto Serif JP\", \"Yu Mincho\", serif",
+    "font-size": "14px",
+    "line-height": 1.8,
+    "text-align": "justify"
+  },
+  "p": {
+    "text-indent": "0",
+    "margin-bottom": "1.0em"
+  },
+  "h1": {
+    "font-size": "1.4em",
+    "font-weight": "bold",
+    "margin-top": "2em",
+    "margin-bottom": "1em",
+    "page-break-before": true
+  },
+  "h2": {
+    "font-size": "1.2em",
+    "font-weight": "bold",
+    "margin-top": "2em",
+    "margin-bottom": "0.8em",
+    "border-bottom": "1px solid #666"
+  },
+  "h3": {
+    "font-size": "1.05em",
+    "font-weight": "bold",
+    "margin-top": "1.5em",
+    "margin-bottom": "0.5em"
+  },
+  "custom_css": "blockquote {\n  border-left: 3px solid #ccc;\n  padding-left: 1em;\n  margin-left: 2em;\n  color: #555;\n  font-style: italic;\n}\n\n.footnote {\n  font-size: 0.85em;\n  color: #666;\n  border-top: 1px solid #ccc;\n  margin-top: 2em;\n  padding-top: 0.5em;\n}"
+}

@@ -1,0 +1,35 @@
+{
+  "template_name": "実用書・教材",
+  "builtin": true,
+  "body": {
+    "font-family": "\"Noto Sans JP\", \"Yu Gothic\", \"Meiryo\", sans-serif",
+    "font-size": "16px",
+    "line-height": 1.7,
+    "text-align": "justify"
+  },
+  "p": {
+    "text-indent": "1em",
+    "margin-bottom": "1.0em"
+  },
+  "h1": {
+    "font-size": "1.2em",
+    "font-weight": "bold",
+    "margin-top": "1em",
+    "margin-bottom": "2.5em",
+    "page-break-before": true
+  },
+  "h2": {
+    "font-size": "1.15em",
+    "font-weight": "bold",
+    "margin-top": "3em",
+    "margin-bottom": "0.5em",
+    "border-bottom": "1px solid #ccc"
+  },
+  "h3": {
+    "font-size": "1.0em",
+    "font-weight": "bold",
+    "margin-top": "2.5em",
+    "margin-bottom": "0.3em"
+  },
+  "custom_css": ""
+}
